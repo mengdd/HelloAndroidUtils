@@ -23,7 +23,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import com.mengdd.utils.android.LogUtils;
 
-
 /*
  * FileUtils copied from org.apache.commons.io.FileUtils
  */
@@ -475,6 +474,47 @@ public class FileUtils {
             createDirForcely(parent.toString());
         }
         return createSingleDir(file.toString());
+
+    }
+
+    /**
+     * 创建目录
+     *
+     * @param dirPath
+     * @return
+     */
+    public static boolean createDir(String dirPath) {
+        LogUtils.i(LOG_TAG, "create dir: " + dirPath);
+        File f = new File(dirPath);
+        if (f.exists()) {
+            if (f.isDirectory()) {
+                return true;
+            }
+            f.delete();
+            return f.mkdir();
+        }
+        return f.mkdirs();
+    }
+
+    /**
+     * 创建文件
+     *
+     * @param filename
+     */
+    public static void createFile(String filename) {
+
+        File file = new File(filename);
+
+        if (!file.exists()) {
+            try {
+
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
