@@ -21,11 +21,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import com.mengdd.utils.android.LogUtils;
+
 
 /*
  * FileUtils copied from org.apache.commons.io.FileUtils
  */
 public class FileUtils {
+
+    private static final String LOG_TAG = "FileUtils";
+
     /**
      * Construct a file from the set of name elements.
      *
@@ -432,6 +437,45 @@ public class FileUtils {
             e.printStackTrace();
         }
         return tmpFile;
+    }
+
+    public static boolean createSingleDir(String path) {
+        LogUtils.i(LOG_TAG, "create sub dir: " + path);
+        if (null == path) {
+            return false;
+        }
+        File f = new File(path);
+        if (f.exists()) {
+            if (f.isDirectory()) {
+                return true;
+            }
+            else {
+                // exist but is a file
+                f.delete();
+            }
+
+        }
+
+        // if file not exists
+        return f.mkdir();
+    }
+
+    public static boolean createDirForcely(String dirPath) {
+        LogUtils.i(LOG_TAG, "create dir forcely: " + dirPath);
+        if (null == dirPath) {
+            return false;
+        }
+        File file = new File(dirPath);
+
+        File parent = null;
+        parent = file.getParentFile();
+
+        if (null != parent) {
+            // Recursion
+            createDirForcely(parent.toString());
+        }
+        return createSingleDir(file.toString());
+
     }
 
 }
