@@ -37,8 +37,7 @@ public class FileUtils {
      */
     public static File getFile(File directory, String... names) {
         if (directory == null) {
-            throw new NullPointerException(
-                    "directorydirectory must not be null");
+            throw new NullPointerException("directorydirectory must not be null");
         }
         if (names == null) {
             throw new NullPointerException("names must not be null");
@@ -98,16 +97,14 @@ public class FileUtils {
     public static FileInputStream openInputStream(File file) throws IOException {
         if (file.exists()) {
             if (file.isDirectory()) {
-                throw new IOException("File '" + file
-                        + "' exists but is a directory");
+                throw new IOException("File '" + file + "' exists but is a directory");
             }
             if (file.canRead() == false) {
                 throw new IOException("File '" + file + "' cannot be read");
             }
         }
         else {
-            throw new FileNotFoundException("File '" + file
-                    + "' does not exist");
+            throw new FileNotFoundException("File '" + file + "' does not exist");
         }
         return new FileInputStream(file);
     }
@@ -138,32 +135,27 @@ public class FileUtils {
      * @throws IOException
      *             if a parent directory needs creating but that fails
      */
-    public static FileOutputStream openOutputStream(File file, boolean append)
-            throws IOException {
+    public static FileOutputStream openOutputStream(File file, boolean append) throws IOException {
         if (file.exists()) {
             if (file.isDirectory()) {
-                throw new IOException("File '" + file
-                        + "' exists but is a directory");
+                throw new IOException("File '" + file + "' exists but is a directory");
             }
             if (file.canWrite() == false) {
-                throw new IOException("File '" + file
-                        + "' cannot be written to");
+                throw new IOException("File '" + file + "' cannot be written to");
             }
         }
         else {
             File parent = file.getParentFile();
             if (parent != null) {
                 if (!parent.mkdirs() && !parent.isDirectory()) {
-                    throw new IOException("Directory '" + parent
-                            + "' could not be created");
+                    throw new IOException("Directory '" + parent + "' could not be created");
                 }
             }
         }
         return new FileOutputStream(file, append);
     }
 
-    public static FileOutputStream openOutputStream(File file)
-            throws IOException {
+    public static FileOutputStream openOutputStream(File file) throws IOException {
         return openOutputStream(file, false);
     }
 
@@ -256,8 +248,7 @@ public class FileUtils {
             boolean filePresent = file.exists();
             if (!file.delete()) {
                 if (!filePresent) {
-                    throw new FileNotFoundException("File does not exist: "
-                            + file);
+                    throw new FileNotFoundException("File does not exist: " + file);
                 }
                 String message = "Unable to delete file: " + file;
                 throw new IOException(message);
@@ -420,9 +411,27 @@ public class FileUtils {
             throw new IllegalArgumentException(directory + " does not exist");
         }
         if (!directory.isDirectory()) {
-            throw new IllegalArgumentException(directory
-                    + " is not a directory");
+            throw new IllegalArgumentException(directory + " is not a directory");
         }
+    }
+
+    private static final String TEMP_FILE_PREFIX = "tmp";
+
+    /**
+     * 创建临时文件
+     *
+     * @param dirFile
+     * @return
+     */
+    public static File createTempFile(File dirFile) {
+        File tmpFile = null;
+        try {
+            tmpFile = File.createTempFile(TEMP_FILE_PREFIX, null, dirFile);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return tmpFile;
     }
 
 }
